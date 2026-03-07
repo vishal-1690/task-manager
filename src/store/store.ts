@@ -16,7 +16,6 @@ export const store = configureStore({
   }
 })
 
-// dump into local on any update
 store.subscribe(() => {
   const state = store.getState()
   storeTasks(state.tasks.tasks)
@@ -25,7 +24,8 @@ store.subscribe(() => {
 export const {
   addTask,
   changeTaskStatus,
-  removeTask
+  removeTask,
+  updateTask
 } = tasksSlice.actions
 
 export type RootState = ReturnType<typeof store.getState>

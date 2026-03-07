@@ -42,6 +42,18 @@ export const createTasksSlice = (initialState = defaultState) => createSlice({
       if (task > -1) {
         state.tasks.splice(task, 1)
       }
+    },
+
+    updateTask: (state, action: PayloadAction<{ id: string; title: string; description: string; status: TaskStatus }>) => {
+
+      const task = state.tasks.find(t => t.id === action.payload.id);
+
+      if (task) {
+        task.title = action.payload.title;
+        task.description = action.payload.description;
+        task.status = action.payload.status;
+        task.modifiedAt = Date.now();
+      }
     }
   }
 })

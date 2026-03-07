@@ -1,33 +1,64 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { Route, Routes, useLocation, useNavigate } from 'react-router'
+import { ArrowLeft, Plus } from 'lucide-react'
+import { AnimatePresence, motion } from 'motion/react'
+import TaskList from './components/TaskList'
+import AddTaskForm from './components/AddTaskForm'
+import EditTaskForm from './components/EditTaskForm'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const navigate = useNavigate()
+  const loc = useLocation()
+  const isRoot = loc.pathname === '/'
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className='shell-container'>
+        <header className='shell-header'>
+          <AnimatePresence mode='wait' initial={false}>
+            {isRoot ? (
+              <motion.div
+                key='header-home'
+                initial={{ opacity: 0, y: -6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 6 }}
+                transition={{ duration: 0.15 }}
+                className='header-title'
+              >
+                TO-DO APP
+              </motion.div>
+            ) : (
+              <motion.div
+                key={`header-${loc.pathname}`}
+                initial={{ opacity: 0, y: -6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 6 }}
+                transition={{ duration: 0.15 }}
+                className='shell-header-inner'
+              >
+                <button className='ghost' onClick={() => navigate(-1)}><ArrowLeft /></button>
+                <span className='header-title'>
+                  {loc.pathname === '/add' ? 'Add Task' : 'Edit Task'}
+                </span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </header>
+
+        <div className='page-content'>
+          <Routes>
+            <Route index Component={TaskList} />
+            <Route path='/add' Component={AddTaskForm} />
+            <Route path='/edit/:id' Component={EditTaskForm} />
+          </Routes>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button role='button' aria-roledescription='Counter' onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+
+      {isRoot && (
+        <button className='add-task' onClick={() => navigate('/add')}>
+          <Plus />
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      )}
     </>
   )
 }

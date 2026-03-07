@@ -1,7 +1,6 @@
 import type { Task } from "../types/task";
 
 const STORAGE_KEY = 'tasks'
-// storing each by id will be messy, dump and load
 export function loadTasks(): Task[] {
   try {
     const rawString = localStorage.getItem(STORAGE_KEY)
@@ -20,7 +19,5 @@ export function storeTasks(tasks: Task[]) {
       STORAGE_KEY,
       JSON.stringify(tasks)
     )
-  } catch {
-    // maybe show a message? event->toast
-  }
+  } catch { /* empty */ }
 }
