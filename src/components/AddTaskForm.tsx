@@ -23,6 +23,7 @@ export default function AddTaskForm() {
         placeholder="Enter the title"
         value={title}
         onChange={e => setTitle(e.target.value)}
+        autoFocus
       />
       <textarea
         className="form-textarea"
