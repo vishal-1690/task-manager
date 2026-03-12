@@ -75,7 +75,7 @@ export default function TaskItem({ task }: Props) {
       <div className="task-actions">
         <button
           className="icon-btn edit-btn"
-          onClick={() => navigate(`/edit/${task.id}`)}
+          onClick={() => navigate(`/task/${task.id}`)}
           title="Edit task"
         >
           <Pencil size={16} />

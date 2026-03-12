@@ -3,8 +3,9 @@ import { Route, Routes, useLocation, useNavigate } from 'react-router'
 import { ArrowLeft, Plus } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import TaskList from './components/TaskList'
-import AddTaskForm from './components/AddTaskForm'
+// import AddTaskForm from './components/AddTaskForm'
 import EditTaskForm from './components/EditTaskForm'
+import { nanoid } from '@reduxjs/toolkit'
 
 function App() {
   const navigate = useNavigate()
@@ -48,14 +49,14 @@ function App() {
         <div className='page-content'>
           <Routes>
             <Route index Component={TaskList} />
-            <Route path='/add' Component={AddTaskForm} />
-            <Route path='/edit/:id' Component={EditTaskForm} />
+            {/* <Route path='/add' Component={AddTaskForm} /> */}
+            <Route path='/task/:id' Component={EditTaskForm} />
           </Routes>
         </div>
       </div>
 
       {isRoot && (
-        <button className='add-task' onClick={() => navigate('/add')}>
+        <button className='add-task' onClick={() => navigate(`/task/${nanoid()}`)}>
           <Plus />
         </button>
       )}

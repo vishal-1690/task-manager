@@ -47,12 +47,22 @@ export const createTasksSlice = (initialState = defaultState) => createSlice({
     updateTask: (state, action: PayloadAction<{ id: string; title: string; description: string; status: TaskStatus }>) => {
 
       const task = state.tasks.find(t => t.id === action.payload.id);
-
+      const now = Date.now();
       if (task) {
         task.title = action.payload.title;
         task.description = action.payload.description;
         task.status = action.payload.status;
         task.modifiedAt = Date.now();
+      } else {
+
+        state.tasks.unshift({
+          id: action.payload.id,
+          title: action.payload.title,
+          description: action.payload.description,
+          status: 'pending',
+          createdAt: now,
+          modifiedAt: now
+        })
       }
     }
   }

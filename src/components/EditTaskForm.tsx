@@ -23,10 +23,12 @@ export default function EditTaskForm() {
   const [description, setDescription] = useState(task?.description ?? '')
   const [status, setStatus] = useState<TaskStatus>(task?.status ?? 'pending')
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [newTask, setNewTask] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!task) navigate('/')
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (!task) setNewTask(true);
   }, [task, navigate])
 
   useEffect(() => {
@@ -38,8 +40,6 @@ export default function EditTaskForm() {
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
-
-  if (!task) return null
 
   const selected = STATUS_OPTIONS.find(o => o.value === status)!
 
@@ -66,32 +66,32 @@ export default function EditTaskForm() {
         rows={4}
       />
 
-      <div className="status-dropdown" ref={dropdownRef}>
-        <button
-          className="status-dropdown-trigger"
-          onClick={() => setDropdownOpen(prev => !prev)}
-        >
-          <span className="status-dot" style={{ backgroundColor: selected.color }} />
-          <span>{selected.label}</span>
-          {dropdownOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-        </button>
+      {!newTask ?
+        <div className="status-dropdown" ref={dropdownRef}>
+          <button
+            className="status-dropdown-trigger"
+            onClick={() => setDropdownOpen(prev => !prev)}
+          >
+            <span className="status-dot" style={{ backgroundColor: selected.color }} />
+            <span>{selected.label}</span>
+            {dropdownOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          </button>
 
-        {dropdownOpen && (
-          <div className="status-dropdown-menu">
-            {STATUS_OPTIONS.map(opt => (
-              <button
-                key={opt.value}
-                className={`status-dropdown-item${opt.value === status ? ' active' : ''}`}
-                onClick={() => { setStatus(opt.value); setDropdownOpen(false) }}
-              >
-                <span className="status-dot" style={{ backgroundColor: opt.color }} />
-                {opt.label}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-
+          {dropdownOpen && (
+            <div className="status-dropdown-menu">
+              {STATUS_OPTIONS.map(opt => (
+                <button
+                  key={opt.value}
+                  className={`status-dropdown-item${opt.value === status ? ' active' : ''}`}
+                  onClick={() => { setStatus(opt.value); setDropdownOpen(false) }}
+                >
+                  <span className="status-dot" style={{ backgroundColor: opt.color }} />
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div> : null}
       <div className="form-actions">
         <button className="secondary" onClick={() => navigate('/')}>
           Cancel
